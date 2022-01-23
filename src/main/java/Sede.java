@@ -5,6 +5,9 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -12,7 +15,7 @@ public class Sede {
 	private int id_sede;
 	private String nom_sede;
 	private Set<Departamento> departamentos;
-	private Set<Proyecto_sede> proyestos_sede;
+	private Set<Proyecto> proyectos;
 	
 	public Sede() {
 	}
@@ -48,12 +51,17 @@ public class Sede {
 		this.departamentos = departamentos;
 	}
 
-	@OneToMany(mappedBy = "sede", cascade = CascadeType.ALL)
-	public Set<Proyecto_sede> getProyestos_sede() {
-		return proyestos_sede;
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(
+			name = "proyecto_sede",
+			joinColumns = @JoinColumn(name = "id_sede"),
+			inverseJoinColumns = @JoinColumn(name = "id_proy")
+	)
+	public Set<Proyecto> getProyectos() {
+		return proyectos;
 	}
 
-	public void setProyestos_sede(Set<Proyecto_sede> proyestos_sede) {
-		this.proyestos_sede = proyestos_sede;
+	public void setProyectos(Set<Proyecto> proyectos) {
+		this.proyectos = proyectos;
 	}
 }

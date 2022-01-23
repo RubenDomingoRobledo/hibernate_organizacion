@@ -1,15 +1,18 @@
+import java.io.Serializable;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 @Entity
-public class Empleado_datos_prof {
+public class Empleado_datos_prof implements Serializable{
 	private String categoria;
 	private Double sueldo_bruto_anual;
 	private Empleado empleado;
 	
-	public Empleado_datos_prof() {
+	public Empleado_datos_prof(){
 	}
 
 	public Empleado_datos_prof(String categoria, Double sueldo_bruto_anual) {
@@ -33,6 +36,7 @@ public class Empleado_datos_prof {
 		this.sueldo_bruto_anual = sueldo_bruto_anual;
 	}
 
+	@Id
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="dni")
 	public Empleado getEmpleado() {

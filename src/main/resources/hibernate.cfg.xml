@@ -5,7 +5,7 @@
  <session-factory>
   <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
   <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/hibernate_relaciones_organizacion</property>
-  <property name="hibernate.connection.password">root</property>
+  <property name="hibernate.connection.password">Alcobendas99*</property>
   <property name="hibernate.connection.username">root</property>
   <property name="hibernate.default_schema">hibernate_futbol</property>
   <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
@@ -14,5 +14,8 @@
   <property name="hibernate.hbm2ddl.auto">create-drop</property>
   <mapping class="Empleado"/>
   <mapping class="Departamento"/>
+  <mapping class="Empleado_datos_prof"/>
+  <mapping class="Proyecto"/>
+  <mapping class="Sede"/>
  </session-factory>
 </hibernate-configuration>

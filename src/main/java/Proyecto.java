@@ -1,11 +1,10 @@
 import java.time.LocalDate;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 
 @Entity
 public class Proyecto {
@@ -13,7 +12,7 @@ public class Proyecto {
 	private LocalDate f_inicio;
 	private LocalDate f_fin;
 	private String nom_proy;
-	private Set<Proyecto_sede> proyectos_sede;
+	private Set<Sede> sedes;
 	
 	public Proyecto() {
 	}
@@ -59,12 +58,12 @@ public class Proyecto {
 		this.nom_proy = nom_proy;
 	}
 
-	@OneToMany(mappedBy = "proyecto", cascade = CascadeType.ALL)
-	public Set<Proyecto_sede> getProyectos_sede() {
-		return proyectos_sede;
+	@ManyToMany(mappedBy = "proyectos")
+	public Set<Sede> getSedes() {
+		return sedes;
 	}
 
-	public void setProyectos_sede(Set<Proyecto_sede> proyectos_sede) {
-		this.proyectos_sede = proyectos_sede;
+	public void setSedes(Set<Sede> sedes) {
+		this.sedes = sedes;
 	}
 }
