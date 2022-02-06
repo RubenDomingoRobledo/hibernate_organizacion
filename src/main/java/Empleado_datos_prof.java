@@ -1,3 +1,4 @@
+
 import java.io.Serializable;
 
 import javax.persistence.CascadeType;
@@ -8,6 +9,10 @@ import javax.persistence.OneToOne;
 
 @Entity
 public class Empleado_datos_prof implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String categoria;
 	private Double sueldo_bruto_anual;
 	private Empleado empleado;
