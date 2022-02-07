@@ -17,16 +17,19 @@ public class Organizacion {
 				
 				//1. Añadimos sedes
 				Set<Sede> sedes = new HashSet<Sede>();
-				Sede sedePrincipal = new Sede("DGT");
-				Sede sedeSecundaria = new Sede("Club Corredores Juan Carlos I");
+				Sede sedePrincipal = new Sede("Madrid");
+				Sede sedeSecundaria = new Sede("Barcelona");
 				sedes.add(sedePrincipal);
 				sedes.add(sedeSecundaria);
 				
 				//Añadimos departamentos a cada sede
 				Set<Departamento> departamentosDGT = new HashSet<Departamento>();
 				Departamento departamento1 = new Departamento("Contabilidad");
+				departamento1.setSede(sedePrincipal);
 				Departamento departamento2 = new Departamento("RRHH");
+				departamento2.setSede(sedePrincipal);
 				Departamento departamento3 = new Departamento("Logistica");
+				departamento3.setSede(sedePrincipal);
 				departamentosDGT.add(departamento1);
 				departamentosDGT.add(departamento2);
 				departamentosDGT.add(departamento3);
@@ -34,7 +37,9 @@ public class Organizacion {
 				
 				Set<Departamento> departamentosClubCorredores = new HashSet<Departamento>();
 				Departamento departamento4 = new Departamento("Clientes");
+				departamento4.setSede(sedeSecundaria);
 				Departamento departamento5 = new Departamento("Inventario");
+				departamento5.setSede(sedeSecundaria);
 				departamentosClubCorredores.add(departamento4);
 				departamentosClubCorredores.add(departamento2);
 				departamentosClubCorredores.add(departamento5);
@@ -43,18 +48,22 @@ public class Organizacion {
 				//Añadimos empleados con sus datos a cada departamento
 				Set<Empleado> empleados1 = new HashSet<Empleado>();
 				Empleado empleado1 = new Empleado("05236987A","Francisco");
+				empleado1.setDepartamento(departamento1);
 				Empleado_datos_prof e1 = new Empleado_datos_prof("Grupo1", 15478.69);
 				e1.setEmpleado(empleado1);
 				
 				Empleado empleado2 = new Empleado("07896542B", "Marta");
+				empleado2.setDepartamento(departamento1);
 				Empleado_datos_prof e2 = new Empleado_datos_prof("Grupo1", 16548.69);
 				e2.setEmpleado(empleado2);
 				
 				Empleado empleado3 = new Empleado("03264578J", "Julian");
+				empleado3.setDepartamento(departamento1);
 				Empleado_datos_prof e3 = new Empleado_datos_prof("Grupo1", 16548.69);
 				e3.setEmpleado(empleado3);
 				
 				Empleado empleado4 = new Empleado("04127789O", "Belen");
+				empleado4.setDepartamento(departamento1);
 				Empleado_datos_prof e4 = new Empleado_datos_prof("Grupo1", 15478.69);
 				e4.setEmpleado(empleado4);
 				
@@ -67,18 +76,22 @@ public class Organizacion {
 					//-----------------------------------------------------------------------------	
 				Set<Empleado> empleados2 = new HashSet<Empleado>();
 				Empleado empleado5 = new Empleado("05693247Y","Ruben");
+				empleado5.setDepartamento(departamento2);
 				Empleado_datos_prof e5 = new Empleado_datos_prof("Grupo2", 19763.69);
 				e5.setEmpleado(empleado5);
 				
 				Empleado empleado6 = new Empleado("04789632P", "Cristina");
+				empleado6.setDepartamento(departamento2);
 				Empleado_datos_prof e6 = new Empleado_datos_prof("Grupo2", 17456.69);
 				e6.setEmpleado(empleado6);
 				
 				Empleado empleado7 = new Empleado("02698426U", "Karim");
+				empleado7.setDepartamento(departamento2);
 				Empleado_datos_prof e7 = new Empleado_datos_prof("Grupo2", 17456.69);
 				e7.setEmpleado(empleado7);
 				
 				Empleado empleado8 = new Empleado("54789632A", "Laura");
+				empleado8.setDepartamento(departamento2);
 				Empleado_datos_prof e8 = new Empleado_datos_prof("Grupo2", 19763.69);
 				e8.setEmpleado(empleado8);
 				
@@ -91,18 +104,22 @@ public class Organizacion {
 				//-----------------------------------------------------------------------------	
 				Set<Empleado> empleados3 = new HashSet<Empleado>();
 				Empleado empleado9 = new Empleado("01862305T","Marcos");
+				empleado9.setDepartamento(departamento3);
 				Empleado_datos_prof e9 = new Empleado_datos_prof("Grupo3", 20763.69);
 				e9.setEmpleado(empleado9);
 				
 				Empleado empleado10 = new Empleado("74896523K", "Violeta");
+				empleado10.setDepartamento(departamento3);
 				Empleado_datos_prof e10 = new Empleado_datos_prof("Grupo3", 15423.69);
 				e10.setEmpleado(empleado10);
 				
 				Empleado empleado11 = new Empleado("4710698V", "Paula");
+				empleado11.setDepartamento(departamento3);
 				Empleado_datos_prof e11 = new Empleado_datos_prof("Grupo2", 19763.69);
 				e11.setEmpleado(empleado11);
 				
 				Empleado empleado12 = new Empleado("73581024B", "Zacarias");
+				empleado12.setDepartamento(departamento3);
 				Empleado_datos_prof e12 = new Empleado_datos_prof("Grupo2", 17456.69);
 				e12.setEmpleado(empleado12);
 				
@@ -115,18 +132,22 @@ public class Organizacion {
 				//-----------------------------------------------------------------------------	
 				Set<Empleado> empleados4 = new HashSet<Empleado>();
 				Empleado empleado13 = new Empleado("27896325M","Hector");
+				empleado13.setDepartamento(departamento4);
 				Empleado_datos_prof e13 = new Empleado_datos_prof("Grupo1", 18763.69);
 				e13.setEmpleado(empleado13);
 				
 				Empleado empleado14 = new Empleado("45630217S", "Juan Carlos");
+				empleado14.setDepartamento(departamento4);
 				Empleado_datos_prof e14 = new Empleado_datos_prof("Grupo1", 17812.69);
 				e14.setEmpleado(empleado14);
 				
 				Empleado empleado15 = new Empleado("35986421X", "Margarita");
+				empleado15.setDepartamento(departamento4);
 				Empleado_datos_prof e15 = new Empleado_datos_prof("Grupo2", 16423.69);
 				e15.setEmpleado(empleado15);
 				
 				Empleado empleado16 = new Empleado("56987423G", "David");
+				empleado16.setDepartamento(departamento4);
 				Empleado_datos_prof e16 = new Empleado_datos_prof("Grupo3", 15423.69);
 				e16.setEmpleado(empleado16);
 				
@@ -139,18 +160,22 @@ public class Organizacion {
 				//-----------------------------------------------------------------------------	
 				Set<Empleado> empleados5 = new HashSet<Empleado>();
 				Empleado empleado17 = new Empleado("6321547L","Maria");
+				empleado17.setDepartamento(departamento5);
 				Empleado_datos_prof e17 = new Empleado_datos_prof("Grupo2", 21763.69);
 				e17.setEmpleado(empleado17);
 				
 				Empleado empleado18 = new Empleado("78412568Z", "Ana");
+				empleado18.setDepartamento(departamento5);
 				Empleado_datos_prof e18 = new Empleado_datos_prof("Grupo2", 20812.69);
 				e18.setEmpleado(empleado18);
 				
 				Empleado empleado19 = new Empleado("16982030I", "Violeta");
+				empleado19.setDepartamento(departamento5);
 				Empleado_datos_prof e19 = new Empleado_datos_prof("Grupo3", 15423.69);
 				e19.setEmpleado(empleado19);
 				
 				Empleado empleado20 = new Empleado("00455967N", "Miguel");
+				empleado20.setDepartamento(departamento5);
 				Empleado_datos_prof e20 = new Empleado_datos_prof("Grupo1", 17812.69);
 				e20.setEmpleado(empleado20);
 				
@@ -162,9 +187,9 @@ public class Organizacion {
 				
 				////Añadimos proyectos a cada sede
 				Set<Proyecto> proyectos1 = new HashSet<Proyecto>();
-				Proyecto proyecto1 = new Proyecto(LocalDate.of(2022, 01, 20), LocalDate.of(2022, 06, 30), "Examen condución por Badajoz");
-				Proyecto proyecto2 = new Proyecto(LocalDate.of(2022, 07, 02), LocalDate.of(2023, 04, 13), "Clases de conducir Mostoles");
-				Proyecto proyecto3 = new Proyecto(LocalDate.of(2022, 01, 24), LocalDate.of(2023, 07, 15), "Clases de conducir poligon industrial Mostoles");
+				Proyecto proyecto1 = new Proyecto(LocalDate.of(2022, 01, 20), LocalDate.of(2022, 06, 30), "Proyecto web");
+				Proyecto proyecto2 = new Proyecto(LocalDate.of(2022, 07, 02), LocalDate.of(2023, 04, 13), "Proyecto en Android");
+				Proyecto proyecto3 = new Proyecto(LocalDate.of(2022, 01, 24), LocalDate.of(2023, 07, 15), "Proyecto en IOS");
 				proyectos1.add(proyecto1);
 				proyectos1.add(proyecto2);
 				proyectos1.add(proyecto3);
@@ -172,9 +197,9 @@ public class Organizacion {
 				sedePrincipal.setProyectos(proyectos1);
 				
 				Set<Proyecto> proyectos2 = new HashSet<Proyecto>();
-				Proyecto proyecto4 = new Proyecto(LocalDate.of(2022, 01, 20), LocalDate.of(2022, 06, 30), "Competicion triple salto");
-				Proyecto proyecto5 = new Proyecto(LocalDate.of(2022, 07, 02), LocalDate.of(2023, 04, 13), "Competicion salto longitud");
-				Proyecto proyecto6 = new Proyecto(LocalDate.of(2022, 01, 24), LocalDate.of(2023, 07, 15), "Competicion salto de altura");
+				Proyecto proyecto4 = new Proyecto(LocalDate.of(2022, 01, 20), LocalDate.of(2022, 06, 30), "Creacion base de datos e inserciones");
+				Proyecto proyecto5 = new Proyecto(LocalDate.of(2022, 07, 02), LocalDate.of(2023, 04, 13), "Creacion interfaz de Android");
+				Proyecto proyecto6 = new Proyecto(LocalDate.of(2022, 01, 24), LocalDate.of(2023, 07, 15), "Creacion interfaz de Apple");
 				proyectos2.add(proyecto4);
 				proyectos2.add(proyecto5);
 				proyectos2.add(proyecto6);

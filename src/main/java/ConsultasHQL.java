@@ -22,7 +22,9 @@ public class ConsultasHQL {
 			
 			ListQuerySede("from Sede");
 			ListQueryDepartamentos("from Departamento");
-			SearchQuery("from Producto where categoria.nombre = 'Lacteos'\n");
+			ListQueryEmpleados("from Empleado_datos_prof p inner join p.empleado");
+			ListQueryProyectos("from Proyecto");
+			/*SearchQuery("from Producto where categoria.nombre = 'Lacteos'\n");
 			QueryParametrizada("from Producto where descripcion like :clave","lentejas");
 			InsertSelectQuery("insert into Categoria (id, nombre)" + " select id, nombre from Producto");
 			UpdateQuery("update Producto set precio = :precio where id = :id");
@@ -31,6 +33,7 @@ public class ConsultasHQL {
 			OrderByQuery("from Producto order by precio ASC");
 			GroupByQuery("select sum(p.precio), p.categoria.nombre from Producto p group by categoria");
 			PaginationQuery("from Producto");
+			*/
 			
 			s.getTransaction().commit();
 	        s.close();
@@ -47,8 +50,7 @@ public class ConsultasHQL {
 		List<Sede> listaSedes = ((org.hibernate.query.Query) query).list();
 		 
 		for (Sede sede : listaSedes) {
-		    System.out.println(sede.getId_sede());
-		    System.out.println(sede.getNom_sede());
+		    System.out.println("Sede [ID: "+ sede.getId_sede() + "; Nombre: " + sede.getNom_sede() + "]");
 		}
 	}
 	
@@ -57,9 +59,7 @@ public class ConsultasHQL {
 		List<Departamento> listaDepartamentos = ((org.hibernate.query.Query) query).list();
 		 
 		for (Departamento departamento : listaDepartamentos) {
-		    System.out.println(departamento.getId_dep());
-		    System.out.println(departamento.getNom_dpto());
-		    System.out.println(departamento.getSede());
+		    System.out.println("Departamento [ID: "+ departamento.getId_dep() + "; Nombre: " + departamento.getNom_dpto() + "]");
 		}
 	}
 	
@@ -68,13 +68,25 @@ public class ConsultasHQL {
 		List<Object[]> objetos = ((org.hibernate.query.Query) query).list();
 		
 		for (Object[] fila : objetos) {
-		    Empleado empleado = (Empleado) fila[0];
-		    Empleado_datos_prof empleado_datos_prof = (Empleado_datos_prof) fila[1];
-		    System.out.println(empleado.getDni() + empleado.getNom_emp() + empleado.getDepartamento());
-		    System.out.println(empleado_datos_prof.getCategoria() + empleado_datos_prof.getSueldo_bruto_anual());
+			Empleado_datos_prof empleado_datos_prof = (Empleado_datos_prof) fila[0];
+		    Empleado empleado = (Empleado) fila[1];
+		    System.out.println("Empleado [DNI: "+ empleado.getDni() + "; Nombre: " + empleado.getNom_emp() + "; Categoria: " + empleado_datos_prof.getCategoria() + "; Sueldo Bruto: " + empleado_datos_prof.getSueldo_bruto_anual()+ "]");
 		}
 	}
 	
+	public static void ListQueryProyectos(String consulta) {
+		Query query = s.createQuery(consulta);
+		List<Proyecto> listaProyectos = ((org.hibernate.query.Query) query).list();
+		 
+		for (Proyecto proyecto : listaProyectos) {
+		    System.out.println(proyecto.getId_proy());
+		    System.out.println(proyecto.getF_inicio());
+		    System.out.println(proyecto.getF_fin());
+		    System.out.println(proyecto.getNom_proy());
+		}
+	}
+	
+	/*
 	public static void QueryParametrizada(String consulta, String clave){
 		Query query = s.createQuery(consulta);
 		query.setParameter("clave", "%" + clave + "%");
@@ -172,4 +184,5 @@ public class ConsultasHQL {
 		    System.out.println(pedido.getProducto().getNombre() + " - " +  pedido.getCantidad() + " - "+ pedido.getFechaPedido());
 		}
 	}
+	*/
 }
