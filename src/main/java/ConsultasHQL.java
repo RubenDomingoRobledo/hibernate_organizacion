@@ -20,7 +20,8 @@ public class ConsultasHQL {
 		try {
 			t = s.beginTransaction();
 			
-			ListQuery("from Categoria");
+			ListQuerySede("from Sede");
+			ListQueryDepartamentos("from Departamento");
 			SearchQuery("from Producto where categoria.nombre = 'Lacteos'\n");
 			QueryParametrizada("from Producto where descripcion like :clave","lentejas");
 			InsertSelectQuery("insert into Categoria (id, nombre)" + " select id, nombre from Producto");
@@ -41,22 +42,36 @@ public class ConsultasHQL {
 		    }
 		}
 	}
-	
-	public static void ListQuery(String consulta) {
+	public static void ListQuerySede(String consulta) {
 		Query query = s.createQuery(consulta);
-		List<Categoria> listaCategorias = ((org.hibernate.query.Query) query).list();
+		List<Sede> listaSedes = ((org.hibernate.query.Query) query).list();
 		 
-		for (Categoria Categoria : listaCategorias) {
-		    System.out.println(Categoria.getNombre());
+		for (Sede sede : listaSedes) {
+		    System.out.println(sede.getId_sede());
+		    System.out.println(sede.getNom_sede());
 		}
 	}
 	
-	public static void SearchQuery(String consulta){
+	public static void ListQueryDepartamentos(String consulta) {
 		Query query = s.createQuery(consulta);
-		List<Producto> productos = ((org.hibernate.query.Query) query).list();
+		List<Departamento> listaDepartamentos = ((org.hibernate.query.Query) query).list();
 		 
-		for (Producto p : productos) {
-		    System.out.println(p.getNombre());
+		for (Departamento departamento : listaDepartamentos) {
+		    System.out.println(departamento.getId_dep());
+		    System.out.println(departamento.getNom_dpto());
+		    System.out.println(departamento.getSede());
+		}
+	}
+	
+	public static void ListQueryEmpleados(String consulta){
+		Query query = s.createQuery(consulta);
+		List<Object[]> objetos = ((org.hibernate.query.Query) query).list();
+		
+		for (Object[] fila : objetos) {
+		    Empleado empleado = (Empleado) fila[0];
+		    Empleado_datos_prof empleado_datos_prof = (Empleado_datos_prof) fila[1];
+		    System.out.println(empleado.getDni() + empleado.getNom_emp() + empleado.getDepartamento());
+		    System.out.println(empleado_datos_prof.getCategoria() + empleado_datos_prof.getSueldo_bruto_anual());
 		}
 	}
 	
