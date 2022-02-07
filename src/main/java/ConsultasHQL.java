@@ -24,6 +24,7 @@ public class ConsultasHQL {
 			ListQueryDepartamentos("from Departamento");
 			ListQueryEmpleados("from Empleado_datos_prof p inner join p.empleado");
 			ListQueryProyectos("from Proyecto");
+			GroupByQuery("select count(p.dni), p.categoria.nombre from Empleado p group by sede");
 			/*SearchQuery("from Producto where categoria.nombre = 'Lacteos'\n");
 			QueryParametrizada("from Producto where descripcion like :clave","lentejas");
 			InsertSelectQuery("insert into Categoria (id, nombre)" + " select id, nombre from Producto");
@@ -70,7 +71,7 @@ public class ConsultasHQL {
 		for (Object[] fila : objetos) {
 			Empleado_datos_prof empleado_datos_prof = (Empleado_datos_prof) fila[0];
 		    Empleado empleado = (Empleado) fila[1];
-		    System.out.println("Empleado [DNI: "+ empleado.getDni() + "; Nombre: " + empleado.getNom_emp() + "; Categoria: " + empleado_datos_prof.getCategoria() + "; Sueldo Bruto: " + empleado_datos_prof.getSueldo_bruto_anual()+ "]");
+		    System.out.println("Empleado [DNI: "+ empleado.getDni() + "; Nombre: " + empleado.getNom_emp() + "; Categoria: " + empleado_datos_prof.getCategoria() + "; Sueldo Bruto: " + empleado_datos_prof.getSueldo_bruto_anual()+"]");
 		}
 	}
 	
@@ -79,10 +80,18 @@ public class ConsultasHQL {
 		List<Proyecto> listaProyectos = ((org.hibernate.query.Query) query).list();
 		 
 		for (Proyecto proyecto : listaProyectos) {
-		    System.out.println(proyecto.getId_proy());
-		    System.out.println(proyecto.getF_inicio());
-		    System.out.println(proyecto.getF_fin());
-		    System.out.println(proyecto.getNom_proy());
+			System.out.println("Proyecto [ID: "+ proyecto.getId_proy() + "; Fecha Inicio: " + proyecto.getF_inicio() + "; Fecha Fin: " + proyecto.getF_fin() + "; Nombre: " + proyecto.getNom_proy()+"]");
+		}
+	}
+	
+	public static void GroupByQuery(String consulta){
+		Query query = s.createQuery(consulta);
+		List<Object[]> objetos = ((org.hibernate.query.Query) query).list();
+		
+		for (Object[] fila : objetos) {
+		    int numEmpleado = (int) fila[0];
+		    Proyecto proyecto = (Proyecto) fila[1];
+		    System.out.println();
 		}
 	}
 	
