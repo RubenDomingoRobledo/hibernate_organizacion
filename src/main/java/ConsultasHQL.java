@@ -27,7 +27,8 @@ public class ConsultasHQL {
 			System.out.println("\n4. MOSTRAR PROYECTOS: ");
 			ListQueryProyectos("from Proyecto");
 			
-			//GroupByQuery("select count(p.dni), count(p.id_proy) from Empleado p group by sede");
+			System.out.println("\n5. NUMERO DE EMPLEADOS Y PROYECTOS POR SEDE");
+			//EmpleadosSede("select count(e.dni), count(proyecto.id_proy), sede.nom_sede from Empleado e inner join e.departamento as departamento inner join departamento.sede as sede inner join sede.id_sede as proy_sede inner join proy_sede.id_proy as proyecto group by sede.id_sede");
 			
 			System.out.println("\n6. MOSTRAR DEPARTAMENTOS A PARTIR DEL NOMBRE: ");
 			DepartamentosPorNombre("select count(d.id_dep) from Departamento d where nom_dpto like :nombre","RRHH");
@@ -35,6 +36,7 @@ public class ConsultasHQL {
 			System.out.println("\n7. MOSTRAR EMPLEADO CON MAYOR SUELDO: ");
 			EmpleadoMayorSueldo("from Empleado_datos_prof e inner join e.empleado order by sueldo_bruto_anual DESC ");
 			
+			System.out.println("\n8. MOSTRAR EMPLEADO A PARTIR DEL DNI: ");
 			//EmpleadoPorDni("from Empleado_datos_prof p inner join p.empleado where dni like :dni", "05236987A");
 			
 			System.out.println("\n9. MOSTRAR NUMERO DE EMPLEADOS POR CADA DEPARTAMENTO");
@@ -43,22 +45,17 @@ public class ConsultasHQL {
 			System.out.println("\n10. MOSTRAR NOMBRE Y DNI DE EMPLEADOS A PARTIR DE LA CATEGORIA");
 			EmpleadoPorCategoria("select e.empleado.nom_emp, e.empleado.dni, e.categoria from Empleado_datos_prof e inner join e.empleado where e.categoria like: categoria", "Grupo1");
 			
+			System.out.println("\n11. ACTUALIZAR EMPLEADO POR SUELDO");
+			EmpleadoMayorSueldo("from Empleado_datos_prof e inner join e.empleado order by sueldo_bruto_anual DESC ");
+			ActualizarEmpleado("update Empleado_datos_prof set sueldo_bruto_anual = :sueldo where dni = :dni");
+			EmpleadoMayorSueldo("from Empleado_datos_prof e inner join e.empleado order by sueldo_bruto_anual DESC ");
+
 			System.out.println("\n12. ACTUALIZAR NOMBRE DE PROYECTO A PARTIR DEL ID");
 			ActualizarProyecto("update Proyecto set nom_proy = :nombre where id_proy = :id_proy");
 			ListQueryProyectos("from Proyecto");
 			
 			System.out.println("\n13. BORRAR DEPARTAMENTO");
 			BorrarDepartamentos("delete from Departamento where id_dep = :id");
-			/*SearchQuery("from Producto where categoria.nombre = 'Lacteos'\n");
-			QueryParametrizada("from Producto where descripcion like :clave","lentejas");
-			InsertSelectQuery("insert into Categoria (id, nombre)" + " select id, nombre from Producto");
-			UpdateQuery("update Producto set precio = :precio where id = :id");
-			DeleteQuery("delete from Categoria where id = :id");
-			JoinQuery("from Producto p inner join p.categoria");
-			OrderByQuery("from Producto order by precio ASC");
-			GroupByQuery("select sum(p.precio), p.categoria.nombre from Producto p group by categoria");
-			PaginationQuery("from Producto");
-			*/
 			
 			s.getTransaction().commit();
 	        s.close();
@@ -108,14 +105,15 @@ public class ConsultasHQL {
 		}
 	}
 	
-	public static void GroupByQuery(String consulta){
+	public static void EmpleadosSede(String consulta){
 		Query query = s.createQuery(consulta);
 		List<Object[]> objetos = ((org.hibernate.query.Query) query).list();
 		
 		for (Object[] fila : objetos) {
 		    int numEmpleado = (int) fila[0];
 		    int numProyectos = (int) fila[1];
-		    System.out.println("");
+		    String nomSede = (String) fila[2];
+		    System.out.println(numEmpleado + " - " + numProyectos + " - " + nomSede);
 		}
 	}
 	
@@ -144,9 +142,10 @@ public class ConsultasHQL {
 		Query query = s.createNativeQuery(consulta);
 		query.setParameter("dni", "%" + dni + "%");
 		
-		Object[] objeto = (Object[]) query.getSingleResult();
-		
-		System.out.println("Empleado [DNI: "+ objeto[0] + "; Nombre: " + objeto[1] + "; Categoria: " + objeto[2] + "; Sueldo Bruto: " + objeto[3] +"]");
+		List<Object[]> objetos = (List<Object[]>) query.getResultList();
+		for (Object[] objeto : objetos) {
+			System.out.println("Empleado [DNI: "+ objeto[0] + "; Nombre: " + objeto[1] + "; Categoria: " + objeto[2] + "; Sueldo Bruto: " + objeto[3] +"]");
+		}
 	}
 	
 	public static void EmpleadoDepartamento(String consulta) {
@@ -172,6 +171,17 @@ public class ConsultasHQL {
 		}
 	}
 	
+	public static void ActualizarEmpleado(String consulta) {
+		Query query = s.createQuery(consulta);
+		query.setParameter("sueldo", 25785.46);
+		query.setParameter("dni", "73495801X");
+		 
+		int filasAfectadas = query.executeUpdate();
+		if (filasAfectadas > 0) {
+		    System.out.println(filasAfectadas + " filas actualizadas.");
+		}
+	}
+	
 	public static void ActualizarProyecto(String consulta) {
 		Query query = s.createQuery(consulta);
 		query.setParameter("nombre", "Queries HQL");
@@ -185,110 +195,11 @@ public class ConsultasHQL {
 	
 	public static void BorrarDepartamentos(String consulta){
 		Query query = s.createQuery(consulta);
-		query.setParameter("id", 11);
+		query.setParameter("id", 9);
 		 
 		int filasAfectadas = query.executeUpdate();
 		if (filasAfectadas > 0) {
 		    System.out.println(filasAfectadas + " filas borradas.");
 		}
 	}
-	/*
-	public static void QueryParametrizada(String consulta, String clave){
-		Query query = s.createQuery(consulta);
-		query.setParameter("clave", "%" + clave + "%");
-		List<Producto> productos = ((org.hibernate.query.Query) query).list();
-		 
-		for (Producto p : productos) {
-		    System.out.println(p.getNombre());
-		}
-	}
-	
-	public static void InsertSelectQuery(String consulta){
-		Query query = s.createQuery(consulta);
-		int filasAfectadas = query.executeUpdate();
-		if (filasAfectadas > 0) {
-		    System.out.println(filasAfectadas + " filas insertadas.");
-		}
-	}
-	
-	public static void UpdateQuery(String consulta){
-		Query query = s.createQuery(consulta);
-		query.setParameter("precio", 488.0f);
-		query.setParameter("id", 2l);
-		 
-		int filasAfectadas = query.executeUpdate();
-		if (filasAfectadas > 0) {
-		    System.out.println(filasAfectadas + " filas actualizadas.");
-		}
-	}
-	
-	public static void DeleteQuery(String consulta){
-		Query query = s.createQuery(consulta);
-		query.setParameter("id", new Long(6));
-		 
-		int filasAfectadas = query.executeUpdate();
-		if (filasAfectadas > 0) {
-		    System.out.println(filasAfectadas + " filas borradas.");
-		}
-	}
-	
-	public static void JoinQuery(String consulta){
-		Query query = s.createQuery(consulta);
-		List<Object[]> objetos = ((org.hibernate.query.Query) query).list();
-		
-		for (Object[] fila : objetos) {
-		    Producto producto = (Producto) fila[0];
-		    Categoria categoria = (Categoria) fila[1];
-		    System.out.println(producto.getNombre() + " - " + categoria.getNombre());
-		}
-	}
-	
-	public static void OrderByQuery(String consulta) {
-		Query query = s.createQuery(consulta);
-		List<Producto> listaProductos = ((org.hibernate.query.Query) query).list();
-		 
-		for (Producto p : listaProductos) {
-		    System.out.println(p.getNombre() + "\t - " + p.getPrecio());
-		}
-	}
-	
-	public static void GroupByQuery(String consulta){
-		Query query = s.createQuery(consulta);
-		List<Object[]> objetos = ((org.hibernate.query.Query) query).list();
-		
-		for (Object[] fila : objetos) {
-		    Double suma = (Double) fila[0];
-		    String categoria = (String) fila[1];
-		    System.out.println(categoria + " - " + suma);
-		}
-	}
-	
-	public static void PaginationQuery(String consulta){
-		Query query = s.createQuery(consulta);
-		query.setFirstResult(0);
-		query.setMaxResults(10);
-		List<Producto> productos = ((org.hibernate.query.Query) query).list();
-		 
-		for (Producto p : productos) {
-		    System.out.println(p.getNombre() + "\t - " + p.getPrecio());
-		}
-	}
-	
-	public static void DataRangeQuery(String consulta) throws ParseException{
-		Query query = s.createQuery(consulta);
-		
-		SimpleDateFormat formateoFecha = new SimpleDateFormat("yyyy-MM-dd");
-		Date fechaComienzo = formateoFecha.parse("2014-11-01");
-		query.setParameter("fechaComienzo", fechaComienzo);
-		 
-		Date fechaFin = formateoFecha.parse("2014-11-22");
-		query.setParameter("fechaFin", fechaFin);
-		 
-		List<Pedido> pedidos = ((org.hibernate.query.Query) query).list();
-		 
-		for (Pedido pedido : pedidos) {
-		    System.out.println(pedido.getProducto().getNombre() + " - " +  pedido.getCantidad() + " - "+ pedido.getFechaPedido());
-		}
-	}
-	*/
 }

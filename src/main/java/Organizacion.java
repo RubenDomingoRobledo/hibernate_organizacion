@@ -259,6 +259,10 @@ public class Organizacion {
 				s.save(e18);
 				s.save(e19);
 				s.save(e20);
+				s.save(e21);
+				s.save(e22);
+				s.save(e23);
+				s.save(e24);
 				
 				s.getTransaction().commit();
 		        s.close();
