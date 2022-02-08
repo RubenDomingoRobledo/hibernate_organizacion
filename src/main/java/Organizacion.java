@@ -40,8 +40,10 @@ public class Organizacion {
 				departamento4.setSede(sedeSecundaria);
 				Departamento departamento5 = new Departamento("Inventario");
 				departamento5.setSede(sedeSecundaria);
+				Departamento departamento6 = new Departamento("RRHH");
+				departamento6.setSede(sedeSecundaria);
 				departamentosClubCorredores.add(departamento4);
-				departamentosClubCorredores.add(departamento2);
+				departamentosClubCorredores.add(departamento6);
 				departamentosClubCorredores.add(departamento5);
 				sedeSecundaria.setDepartamentos(departamentosClubCorredores);
 				
@@ -184,6 +186,34 @@ public class Organizacion {
 				empleados5.add(empleado17);
 				empleados5.add(empleado18);
 				departamento5.setEmpleados(empleados5);
+				
+				//-----------------------------------------------------------------------------	
+				Set<Empleado> empleados6 = new HashSet<Empleado>();
+				Empleado empleado21 = new Empleado("73495801X","Rafael");
+				empleado21.setDepartamento(departamento6);
+				Empleado_datos_prof e21 = new Empleado_datos_prof("Grupo1", 22896.69);
+				e21.setEmpleado(empleado21);
+				
+				Empleado empleado22 = new Empleado("05554447G", "Gonzalo");
+				empleado22.setDepartamento(departamento6);
+				Empleado_datos_prof e22 = new Empleado_datos_prof("Grupo3", 24812.69);
+				e22.setEmpleado(empleado22);
+				
+				Empleado empleado23 = new Empleado("08888997O", "Belen");
+				empleado23.setDepartamento(departamento6);
+				Empleado_datos_prof e23 = new Empleado_datos_prof("Grupo3", 22423.69);
+				e23.setEmpleado(empleado23);
+				
+				Empleado empleado24 = new Empleado("02223647U", "Pablo");
+				empleado24.setDepartamento(departamento6);
+				Empleado_datos_prof e24 = new Empleado_datos_prof("Grupo2", 18563.69);
+				e24.setEmpleado(empleado24);
+				
+				empleados6.add(empleado21);
+				empleados6.add(empleado22);
+				empleados6.add(empleado23);
+				empleados6.add(empleado24);
+				departamento6.setEmpleados(empleados6);
 				
 				////Añadimos proyectos a cada sede
 				Set<Proyecto> proyectos1 = new HashSet<Proyecto>();
