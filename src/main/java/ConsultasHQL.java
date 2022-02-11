@@ -1,3 +1,4 @@
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.persistence.Query;
@@ -28,7 +29,13 @@ public class ConsultasHQL {
 			ListQueryProyectos("from Proyecto");
 			
 			System.out.println("\n5. NUMERO DE EMPLEADOS Y PROYECTOS POR SEDE");
-			//EmpleadosSede("select count(e.dni), count(proyecto.id_proy), sede.nom_sede from Empleado e inner join e.departamento as departamento inner join departamento.sede as sede inner join sede.id_sede as proy_sede inner join proy_sede.id_proy as proyecto group by sede.id_sede");
+			EmpleadosSede("SELECT sede.nom_sede, count(distinct empleado.dni), count(distinct proyecto.id_proy)\r\n"
+					+ "FROM empleado\r\n"
+					+ "join departamento on empleado.id_dep = departamento.id_dep\r\n"
+					+ "join sede on departamento.id_sede = sede.id_sede\r\n"
+					+ "join proyecto_sede on sede.id_sede = proyecto_sede.id_sede\r\n"
+					+ "join proyecto on proyecto_sede.id_proy = proyecto.id_proy\r\n"
+					+ "group by sede.id_sede");
 			
 			System.out.println("\n6. MOSTRAR DEPARTAMENTOS A PARTIR DEL NOMBRE: ");
 			DepartamentosPorNombre("select count(d.id_dep) from Departamento d where nom_dpto like :nombre","RRHH");
@@ -37,7 +44,7 @@ public class ConsultasHQL {
 			EmpleadoMayorSueldo("from Empleado_datos_prof e inner join e.empleado order by sueldo_bruto_anual DESC ");
 			
 			System.out.println("\n8. MOSTRAR EMPLEADO A PARTIR DEL DNI: ");
-			//EmpleadoPorDni("from Empleado_datos_prof p inner join p.empleado where dni like :dni", "05236987A");
+			EmpleadoPorDni("select empleado.dni, empleado.nom_emp, empleado_datos_prof.categoria, empleado_datos_prof.sueldo_bruto_anual from empleado_datos_prof join empleado on empleado_datos_prof.dni = empleado.dni WHERE empleado.dni like :dni", "35986421X");
 			
 			System.out.println("\n9. MOSTRAR NUMERO DE EMPLEADOS POR CADA DEPARTAMENTO");
 			EmpleadoDepartamento("select count(e.dni), e.departamento.nom_dpto from Empleado e inner join e.departamento group by e.departamento.nom_dpto");
@@ -48,14 +55,18 @@ public class ConsultasHQL {
 			System.out.println("\n11. ACTUALIZAR EMPLEADO POR SUELDO");
 			EmpleadoMayorSueldo("from Empleado_datos_prof e inner join e.empleado order by sueldo_bruto_anual DESC ");
 			ActualizarEmpleado("update Empleado_datos_prof set sueldo_bruto_anual = :sueldo where dni = :dni");
-			EmpleadoMayorSueldo("from Empleado_datos_prof e inner join e.empleado order by sueldo_bruto_anual DESC ");
 
 			System.out.println("\n12. ACTUALIZAR NOMBRE DE PROYECTO A PARTIR DEL ID");
 			ActualizarProyecto("update Proyecto set nom_proy = :nombre where id_proy = :id_proy");
-			ListQueryProyectos("from Proyecto");
 			
-			System.out.println("\n13. BORRAR DEPARTAMENTO");
-			BorrarDepartamentos("delete from Departamento where id_dep = :id");
+			System.out.println("\nMOSTRAR ESTADO DE LA BASE DE DATOS");
+			ListQuerySede("from Sede");
+			System.out.println("------------------------------------");
+			ListQueryDepartamentos("from Departamento");
+			System.out.println("------------------------------------");
+			ListQueryEmpleados("from Empleado_datos_prof e inner join e.empleado");
+			System.out.println("------------------------------------");
+			ListQueryProyectos("from Proyecto");
 			
 			s.getTransaction().commit();
 	        s.close();
@@ -106,14 +117,14 @@ public class ConsultasHQL {
 	}
 	
 	public static void EmpleadosSede(String consulta){
-		Query query = s.createQuery(consulta);
+		Query query = s.createNativeQuery(consulta);
 		List<Object[]> objetos = ((org.hibernate.query.Query) query).list();
 		
 		for (Object[] fila : objetos) {
-		    int numEmpleado = (int) fila[0];
-		    int numProyectos = (int) fila[1];
-		    String nomSede = (String) fila[2];
-		    System.out.println(numEmpleado + " - " + numProyectos + " - " + nomSede);
+		    String nomSede = (String) fila[0];
+		    int numEmpleados = ((BigInteger) fila[1]).intValue();
+		    int numProyectos = ((BigInteger) fila[2]).intValue();
+		    System.out.println("Numero de Empleados: "+ numEmpleados + "; Numero de Proyectos: " + numProyectos + "; Nombre de la Sede: " + nomSede);
 		}
 	}
 	
@@ -143,8 +154,12 @@ public class ConsultasHQL {
 		query.setParameter("dni", "%" + dni + "%");
 		
 		List<Object[]> objetos = (List<Object[]>) query.getResultList();
-		for (Object[] objeto : objetos) {
-			System.out.println("Empleado [DNI: "+ objeto[0] + "; Nombre: " + objeto[1] + "; Categoria: " + objeto[2] + "; Sueldo Bruto: " + objeto[3] +"]");
+		for (Object[] fila : objetos) {
+		    dni = (String) fila[0];
+		    String nombre = (String) fila[1];
+		    String categoria = (String) fila[2];
+		    Double sueldo = (Double) fila[3];
+		    System.out.println("Empleado [DNI: "+ dni + "; Nombre: " + nombre +"; Categoria: " + categoria + "; Sueldo: "+ sueldo + "]");
 		}
 	}
 	
@@ -172,6 +187,8 @@ public class ConsultasHQL {
 	}
 	
 	public static void ActualizarEmpleado(String consulta) {
+		Session session = Hibernate_Util.getSessionFactory().openSession();
+		Transaction t = session.beginTransaction();
 		Query query = s.createQuery(consulta);
 		query.setParameter("sueldo", 25785.46);
 		query.setParameter("dni", "73495801X");
@@ -180,6 +197,8 @@ public class ConsultasHQL {
 		if (filasAfectadas > 0) {
 		    System.out.println(filasAfectadas + " filas actualizadas.");
 		}
+		session.getTransaction().commit();
+		session.close();
 	}
 	
 	public static void ActualizarProyecto(String consulta) {
@@ -190,16 +209,6 @@ public class ConsultasHQL {
 		int filasAfectadas = query.executeUpdate();
 		if (filasAfectadas > 0) {
 		    System.out.println(filasAfectadas + " filas actualizadas.");
-		}
-	}
-	
-	public static void BorrarDepartamentos(String consulta){
-		Query query = s.createQuery(consulta);
-		query.setParameter("id", 9);
-		 
-		int filasAfectadas = query.executeUpdate();
-		if (filasAfectadas > 0) {
-		    System.out.println(filasAfectadas + " filas borradas.");
 		}
 	}
 }
