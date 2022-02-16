@@ -9,6 +9,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 @Entity
 public class Departamento {
 	private int id_dep;
@@ -42,6 +45,7 @@ public class Departamento {
 	}
 
 	@OneToMany(mappedBy = "departamento", cascade = CascadeType.ALL)
+	@OnDelete(action= OnDeleteAction.CASCADE)
 	public Set<Empleado> getEmpleados() {
 		return empleados;
 	}

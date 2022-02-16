@@ -10,6 +10,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 @Entity
 public class Sede {
 	private int id_sede;
@@ -43,6 +46,7 @@ public class Sede {
 	}
 
 	@OneToMany(mappedBy = "sede", cascade = CascadeType.ALL)
+	@OnDelete(action= OnDeleteAction.CASCADE)
 	public Set<Departamento> getDepartamentos() {
 		return departamentos;
 	}
